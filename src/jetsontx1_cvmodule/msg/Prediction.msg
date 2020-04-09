@@ -1,0 +1,13 @@
+string[] classes
+float64[] probabilities
+int64 xmin
+int64 ymin
+int64 xmax
+int64 ymax
+int64 id
+string face
+string smile
+float64 distance
+float64 angle
+float64 xcoord
+float64 ycoord
