@@ -31,8 +31,8 @@ def detector():
 	# Define paths for yolo files
 	darknet_path = '/home/ubuntu/catkin_ws/src/jetsontx1_cvmodule/src/pyyolo/darknet' # Only './darknet' is dependent on location of rosrun command
 	datacfg = 'cfg/coco.data'
-	cfgfile = 'cfg/yolov3-tiny.cfg'
-	weightfile = '../yolov3-tiny.weights' #'/media/ubuntu/SDcardSpace/yolov2.weights' this also works but it's way slower
+	cfgfile =  'cfg/yolov3-tiny.cfg'
+	weightfile = '../yolov3-tiny.weights' #'/media/ubuntu/SDcard/yoloWeights/yolov2-tiny.weights' this also works but it loads way slower
 	filename = darknet_path + '/data/person.jpg'
 	# Image resolution parameters
 	(width, height) = (1280, 720) # Use (672,376) for VGA and (1280,720) for HD720 resolution
@@ -49,11 +49,12 @@ def detector():
 	# Create a InitParameters object and set configuration parameters
 	init_params = sl.InitParameters()
 	init_params.camera_resolution = sl.RESOLUTION.HD720  # Use HD1080, HD720 or VGA video mode
-	init_params.camera_fps = 30  # Set fps at 30
+	init_params.camera_fps = 15  # Set fps at 30
 	# Open the camera
 	err = zed.open(init_params)
 	if err != sl.ERROR_CODE.SUCCESS:
 		exit(1)
+	zed.set_camera_settings(sl.VIDEO_SETTINGS.EXPOSURE, 40)
 	image = sl.Mat()
 	point_cloud = sl.Mat()
 	colours = 255*np.random.rand(32,3) # For drawing different colours on BB
@@ -74,10 +75,10 @@ def detector():
 			Data = Data.ravel()/255.0
 			end5 = time.time()
 			Data = np.ascontiguousarray(Data, dtype=np.float32)
-			#start1 = time.time()
+			start1 = time.time()
 			outputs = pyyolo.detect(width, height, 4, Data, 0.5, 0.8) #pyyolo.detect returns: [{'right':, 'bottom':, 'top':, 'class':, 'prob':, 'left':}]
-			#end1 = time.time()
-			#print("Section cycle time: ", end1 - start1)
+			end1 = time.time()
+			print("Section cycle time: ", end1 - start1)
 			dets = np.empty((0,5), int) 
 			count = 0
 			for output in outputs:
@@ -99,8 +100,8 @@ def detector():
 				start3 = time.time()
 				facesmile_detect(detectinfo, gray_picture, data, face_cascade, smile_cascade)
 				end3 = time.time()
-				print("facesmile detect cycle time: ", end3 - start3)
-				print detectinfo['smile']
+				#print("facesmile detect cycle time: ", end3 - start3)
+				#print detectinfo['smile']
 
 				pred = Prediction()
 				#pred.probabilities.append()
