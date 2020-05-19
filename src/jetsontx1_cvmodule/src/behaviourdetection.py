@@ -20,11 +20,10 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 def detector():
-	print cv2.__version__
 	# Initialize publisher ROS node
 	pub = rospy.Publisher('predictions', Predictions, queue_size=10)
 	pub1 = rospy.Publisher('peoplecount', Peoplecount, queue_size=10)
-	pub2 = rospy.Publisher('videostream', Image, queue_size=10)
+	pub2 = rospy.Publisher('videostream', Image, queue_size=1)
 	rospy.init_node('detector', anonymous=True)
 	# Ceate sort object
 	mot_tracker = Sort()
@@ -54,7 +53,7 @@ def detector():
 	err = zed.open(init_params)
 	if err != sl.ERROR_CODE.SUCCESS:
 		exit(1)
-	zed.set_camera_settings(sl.VIDEO_SETTINGS.EXPOSURE, 40)
+	zed.set_camera_settings(sl.VIDEO_SETTINGS.EXPOSURE, 50)
 	image = sl.Mat()
 	point_cloud = sl.Mat()
 	colours = 255*np.random.rand(32,3) # For drawing different colours on BB
@@ -147,10 +146,10 @@ def facesmile_detect(detectinfo, gray_picture, data, face_cascade, smile_cascade
 		gray_face = gray_body[y:y+h, x:x+w]
 		smiles = smile_cascade.detectMultiScale(gray_face)
 		for (sx,sy,sw,sh) in smiles:
-			detectinfo['smile'] = 'yes'
-			if sy+sh < h:
-				cv2.rectangle(data, (detectinfo['left']+x+sx,detectinfo['top']+(y+sy)), (detectinfo['left']+x+sx+sw,detectinfo['top']+y+sy+sh), (0,0,255), 2)#pass
+			if sy < h/2:#sy+sh < h orig
+				pass #cv2.rectangle(data, (detectinfo['left']+x+sx,detectinfo['top']+(y+sy)), (detectinfo['left']+x+sx+sw,detectinfo['top']+y+sy+sh), (0,0,255), 2)#pass
 			else:
+				detectinfo['smile'] = 'yes'
 				cv2.rectangle(data, (detectinfo['left']+x+sx,detectinfo['top']+(y+sy)), (detectinfo['left']+x+sx+sw,detectinfo['top']+y+sy+sh), (0,255,0), 2)
 
 def euclidean_distance(detectinfo, point_cloud):

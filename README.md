@@ -1,7 +1,7 @@
 behaviourdetection
 =====
 
-This repository contains the source code for the ROS workspace including the NTNU Cyborg's Computer Vision Module, which should be installed on the [Jetson TX1 Development Kit](https://developer.nvidia.com/embedded/jetson-tx1-developer-kit). The system uses the first generation [ZED Stereo Camera](https://www.stereolabs.com/zed/) to detect human behaviour.
+This repository contains the source code for the ROS workspace including the NTNU Cyborg's Computer Vision Module, which should be installed on the [Jetson TX1 Development Kit](https://developer.nvidia.com/embedded/jetson-tx1-developer-kit). The system uses the first generation [ZED Stereo Camera](https://www.stereolabs.com/zed/) to detect human behaviour. The repository includes the source files for [pyyolo](https://github.com/digitalbrain79/pyyolo) and [sort](https://github.com/abewley/sort)
 
 Node name: jetsontx1_cvmodule Language: Python
 ### Dependencies
